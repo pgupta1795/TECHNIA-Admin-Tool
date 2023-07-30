@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>TECHNIA</Authors>
+    <Company>TECHNIA</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.authentication.ui.win\ds.authentication.ui.win.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.authentication\ds.authentication.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.delmia.dsmfg\ds.delmia.dsmfg.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia.common\ds.enovia.common.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia.document\ds.enovia.document.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia.dseng\ds.enovia.dseng.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia\ds.enovia.csproj" />
+    <ProjectReference Include="..\technia.admintool.logger\technia.admintool.settings.csproj" />
+  </ItemGroup>
+
+</Project>

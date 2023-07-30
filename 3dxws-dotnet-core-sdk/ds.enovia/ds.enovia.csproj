@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Dassault Systèmes - EMED CPE</Authors>
+    <Version>2.0.5</Version>
+    <Company>Dassault Systèmes</Company>
+    <Description>3DEXPERIENCE Dotnet Core SDK for Enovia (base) web services</Description>
+    <Copyright>Copyright ©  2021</Copyright>
+    <PackageLicenseUrl></PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/3ds-cpe-emed/3dxws-dotnet-core-sdk</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>fix: #47 Dictionary exception in GetCurrentUserInfoAsync()</PackageReleaseNotes>
+    <PackageTags>3DEXPERIENCE</PackageTags>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ds.enovia.snk</AssemblyOriginatorKeyFile>
+    <RepositoryUrl>https://github.com/3ds-cpe-emed/3dxws-dotnet-core-sdk</RepositoryUrl>
+    <PackageLicenseFile>MITLicense.md</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ds.authentication\ds.authentication.csproj" />
+    <ProjectReference Include="..\ds.enovia.common\ds.enovia.common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\MITLicense.md">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
