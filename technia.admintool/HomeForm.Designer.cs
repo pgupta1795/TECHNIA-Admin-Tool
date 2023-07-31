@@ -75,6 +75,7 @@
             // 
             // homeTitle
             // 
+            homeTitle.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             homeTitle.AutoSize = true;
             homeTitle.BackColor = Color.White;
             homeTitle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);

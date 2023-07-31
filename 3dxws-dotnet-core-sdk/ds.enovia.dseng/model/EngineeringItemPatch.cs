@@ -35,7 +35,7 @@ namespace ds.enovia.dseng.model
         public string title { get; set; }
         public string description { get; set; }
         public string cestamp { get; set; }
-        public string isManufacturable { get; set; }
+        public bool isManufacturable { get; set; }
 
         [JsonPropertyName("dseng:EnterpriseReference")]
         public EnterpriseReference enterpriseReference { get; set; }

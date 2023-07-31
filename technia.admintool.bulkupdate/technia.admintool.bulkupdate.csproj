@@ -17,6 +17,7 @@
     <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.delmia.dsmfg\ds.delmia.dsmfg.csproj" />
     <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia.common\ds.enovia.common.csproj" />
     <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia.dseng\ds.enovia.dseng.csproj" />
+    <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia.dslc\ds.enovia.dslc.csproj" />
     <ProjectReference Include="..\3dxws-dotnet-core-sdk\ds.enovia\ds.enovia.csproj" />
     <ProjectReference Include="..\technia.admintool.logger\technia.admintool.settings.csproj" />
   </ItemGroup>

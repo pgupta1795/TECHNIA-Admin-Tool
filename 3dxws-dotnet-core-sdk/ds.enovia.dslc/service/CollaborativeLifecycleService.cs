@@ -30,10 +30,11 @@ namespace ds.enovia.dslc.service
 {
     public class CollaborativeLifecycleService : EnoviaBaseService
     {
-        private const string BASE_RESOURCE      = "/resources/v1/modeler/dslc";
-        private const string VERSION_CREATE     = "/version/create";
-        private const string VERSION_GRAPH      = "/version/getGraph";
+        private const string BASE_RESOURCE = "/resources/v1/modeler/dslc";
+        private const string VERSION_CREATE = "/version/create";
+        private const string VERSION_GRAPH = "/version/getGraph";
         private const string TRANSFER_OWNERSHIP = "/ownership/transfer";
+        private const string UNRESERVE_OBJECT = "/reservation/unreserve";
 
         public string GetBaseResource()
         {
@@ -44,7 +45,7 @@ namespace ds.enovia.dslc.service
         {
 
         }
-        
+
         //Note : It was verified that the source property of the input should be null (R2022XGA) this might change in future versions
         public async Task<VersionGraph> GetVersionGraph(BusinessObjectData _businessObjectIds)
         {
@@ -62,10 +63,10 @@ namespace ds.enovia.dslc.service
 
             return await requestResponse.Content.ReadFromJsonAsync<VersionGraph>();
 
-         }
+        }
 
-         public async Task<IOwnershipTransferResponse> TransferOwnership(IOwnershipTransferData _ownershipTransferData)
-         {
+        public async Task<IOwnershipTransferResponse> TransferOwnership(IOwnershipTransferData _ownershipTransferData)
+        {
             string getTransferOwnershipResourceUrl = string.Format("{0}{1}", GetBaseResource(), TRANSFER_OWNERSHIP);
 
             string bodyTransferOwnership = JsonSerializer.Serialize<object>(_ownershipTransferData);
@@ -74,21 +75,33 @@ namespace ds.enovia.dslc.service
 
             if (requestResponse.StatusCode != System.Net.HttpStatusCode.OK)
             {
-               //handle according to established exception policy
-               throw (new TransferOwnershipException(requestResponse));
+                //handle according to established exception policy
+                throw (new TransferOwnershipException(requestResponse));
             }
 
             // Deserialize with interface implementation classes to be used during serial/deserialization defined in options through custom type converter
 
-            JsonSerializerOptions options = new JsonSerializerOptions {
-                  Converters =
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                Converters =
                   {
                       new TypeMappingConverter<IOwnershipTransferStatus, OwnershipTransferStatus>(),
                       new TypeMappingConverter<IOwnershipTransferResponse, OwnershipTransferResponse>()
                   }
             };
-         
+
             return await requestResponse.Content.ReadFromJsonAsync<IOwnershipTransferResponse>(options);
-         }
-   }
+        }
+
+        public async Task<UnreserveResults> UnreserveObject(Unreserve _businessObjectIds)
+        {
+            string unreserveObjectUrl = string.Format("{0}{1}", GetBaseResource(), UNRESERVE_OBJECT);
+            string unreservePayload = JsonSerializer.Serialize(_businessObjectIds);
+            HttpResponseMessage requestResponse = await PostAsync(unreserveObjectUrl, _body: unreservePayload);
+
+            if (requestResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                throw (new UnreserveObjectException(requestResponse));
+            return await requestResponse.Content.ReadFromJsonAsync<UnreserveResults>();
+        }
+    }
 }

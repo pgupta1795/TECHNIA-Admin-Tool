@@ -13,6 +13,7 @@
 // BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //------------------------------------------------------------------------------------------------------------------------------------
+using System;
 using System.ComponentModel;
 
 namespace ds.enovia.dseng.mask
@@ -22,8 +23,22 @@ namespace ds.enovia.dseng.mask
         [DefaultValue("dskern:Mask.Default")]
         Default,
         [DefaultValue("dsmveng:EngItemMask.Common")]
-        Common, 
+        Common,
         [DefaultValue("dsmveng:EngItemMask.Details")]
-        Details  
+        Details
+    }
+
+    public static class EnumHelper
+    {
+        public static T GetEnumValueByDefaultValue<T>(string defaultValue) where T : Enum
+        {
+            foreach (var field in typeof(T).GetFields())
+            {
+                var attribute = Attribute.GetCustomAttribute(field, typeof(DefaultValueAttribute)) as DefaultValueAttribute;
+                if (attribute != null && attribute.Value.Equals(defaultValue))
+                    return (T)field.GetValue(null);
+            }
+            throw new ArgumentException("Enum value not found for the given default value.", nameof(defaultValue));
+        }
     }
 }

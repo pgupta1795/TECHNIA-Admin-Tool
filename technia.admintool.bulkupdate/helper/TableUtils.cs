@@ -10,32 +10,43 @@ namespace technia.admintool.bulkupdate
         public static DataTable GetTable(List<ExpandoObject> rows)
         {
             DataTable dataTable = new();
-            GetTable(rows, ref dataTable, false);
+            GetTable(rows, ref dataTable, new(), new(), false);
             return dataTable;
         }
 
-        public static DataTable GetTableWithComments(List<ExpandoObject> rows)
+        public static DataTable GetTableWithExtraCols(List<ExpandoObject> rows, List<string> comments, List<string> errors)
         {
             DataTable dataTable = new();
             DataColumn commentsCol = new("Comments");
             dataTable.Columns.Add(commentsCol);
-
-            GetTable(rows, ref dataTable, true);
+            DataColumn errorsCol = new("Errors");
+            dataTable.Columns.Add(errorsCol);
+            GetTable(rows, ref dataTable, comments, errors, true);
             return dataTable;
         }
 
-        private static void GetTable(List<ExpandoObject> rows, ref DataTable dataTable, bool addComments)
+        private static void GetTable(List<ExpandoObject> rows, ref DataTable dataTable, List<string> comments, List<string> errors, bool addExtraCols)
         {
             string[] headers = ExpandoObjectUtils.GetAllKeys(rows);
 
             foreach (string columnHeader in headers)
                 AddRow(ref dataTable, columnHeader, columnHeader);
 
-            foreach (var record in rows)
+            for (var i = 0; i < rows.Count; i++)
             {
+                var record = rows[i];
                 var dict = ExpandoObjectUtils.GetDictionary(record);
-                if (addComments) dataTable.Rows.Add(ArrayImplUtils.AddElementAtFirst(dict.Values.ToArray(), "Comments"));
-                else dataTable.Rows.Add(dict.Values.ToArray());
+                if (!addExtraCols) dataTable.Rows.Add(dict.Values.ToArray());
+                else
+                {
+                    var comment = comments[i];
+                    var error = errors[i];
+                    // add error as 2nd column
+                    var newArray = ArrayImplUtils.AddElementAtFirst(dict.Values.ToArray(), error);
+                    // add comments as 1st column
+                    newArray = ArrayImplUtils.AddElementAtFirst(newArray, comment);
+                    dataTable.Rows.Add(newArray);
+                }
             }
         }
 

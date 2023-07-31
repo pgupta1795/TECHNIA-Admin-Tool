@@ -142,7 +142,7 @@ namespace technia.admintool.engineeringitems
             }
             catch (Exception _ex)
             {
-                Logger.Error(_ex.Message);
+                Logger.Error("Error while searching eng item : " + _ex);
                 MessageBox.Show(_ex.Message);
             }
             Cursor = Cursors.Default;

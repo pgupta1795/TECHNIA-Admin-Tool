@@ -22,13 +22,13 @@ namespace ds.enovia.dseng.model
 {
     public class EngineeringItem : Item
     {
-        public string isManufacturable { get; set; }
+        public bool isManufacturable { get; set; }
 
         [JsonPropertyName("dseng:EnterpriseReference")]
         public EnterpriseReference enterpriseReference { get; set; }
 
         [JsonPropertyName("dseno:EnterpriseAttributes")]
         public Dictionary<string, object> enterpriseAttributes { get; set; }
-      
+
     }
 }

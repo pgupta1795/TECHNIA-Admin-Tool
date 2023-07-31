@@ -1,5 +1,6 @@
 ﻿using ds.authentication;
 using ds.enovia.dseng.service;
+using ds.enovia.dslc.service;
 using System.Data;
 using System.Dynamic;
 using technia.admintool.bulkupdate.helper;
@@ -19,6 +20,8 @@ namespace technia.admintool.bulkupdate
 
         private EngineeringServices engServices;
 
+        private CollaborativeLifecycleService collabLifecycleServices;
+
         public BulkUpdateForm(IPassportAuthentication Passport, AuthenticationInfo authInfo)
         {
             InitializeComponent();
@@ -32,6 +35,12 @@ namespace technia.admintool.bulkupdate
             this.authInfo = authInfo;
 
             engServices = new EngineeringServices(authInfo.EnoviaURL, Passport)
+            {
+                SecurityContext = authInfo.SecurityContext,
+                Tenant = authInfo.Tenant
+            };
+
+            collabLifecycleServices = new CollaborativeLifecycleService(authInfo.EnoviaURL, Passport)
             {
                 SecurityContext = authInfo.SecurityContext,
                 Tenant = authInfo.Tenant
@@ -75,38 +84,44 @@ namespace technia.admintool.bulkupdate
 
         #region update table data into 3DX
 
-        private async void UpdateButton_Click(object sender, EventArgs e)
+        private async void UpdateButton_ClickAsync(object sender, EventArgs e)
         {
             Logger.Info("Starting update of data from table into 3DX");
             try
             {
                 Cursor = Cursors.WaitCursor;
                 bindingSource.DataSource = null;
-                // create error and comments to store results of processed OK or failed with error and add it in final table
-                List<string> commentsColumn = new();
-                List<string> errorsColumn = new();
-
+                List<string> commentsColumn = new(); // create error and comments
+                List<string> errorsColumn = new(); // to store results of processed OK or failed with error
+                                                   // and add it in final table
                 foreach (var record in csvData)
                 {
+                    string rowErrors = "";
+                    string rowComments = "";
                     // fetch engItem details using title and revision 
-                    var (engItem, error) = await EngUtils.GetEngItemDetailAsync(engServices, record);
-                    if (error != null)
-                    {
-                        errorsColumn.Add(error);
-                    }
+                    var (engItem, error, comment) = await EngUtils.GetEngItemDetailAsync(engServices, record);
+                    string id = engItem.id;
+                    rowComments += comment;
+                    if (error != null) rowErrors += error;
                     else
                     {
                         // Unreserve part
+                        var (reservedBy, error2, comment2) = await EngUtils.UnreserveEngItemAsync(collabLifecycleServices, id);
+                        rowComments += comment2;
+                        if (error2 != null) rowErrors += error2;
+                        else
+                        {
+                            // Check if change control exists on part
 
-                        // Check if change control exists on part
+                            // Removing change control
 
-                        // Removing change control
-
-                        // Update part with the data from csv back to 3DX 
+                            // Update part with the data from csv back to 3DX
+                        }
                     }
+                    errorsColumn.Add(rowErrors);
+                    commentsColumn.Add(rowComments);
                 }
-
-                DataTable dataTable = TableUtils.GetTableWithComments(csvData);
+                DataTable dataTable = TableUtils.GetTableWithExtraCols(csvData, commentsColumn, errorsColumn);
                 bindingSource.DataSource = dataTable;
                 Logger.Info("Table updated into 3DX after reading file...");
             }

@@ -126,7 +126,7 @@ namespace technia.admintool
 
         public void DisableMenuButtons()
         {
-            //searchButton.Enabled = false;
+            searchButton.Enabled = false;
             engineeringButton.Enabled = false;
             documentsButton.Enabled = false;
         }
