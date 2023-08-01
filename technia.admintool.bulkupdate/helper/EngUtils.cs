@@ -21,7 +21,7 @@ namespace technia.admintool.bulkupdate.helper
             {
                 string err = $"Could not find engineering item {title} - {rev}";
                 SearchQuery searchQuery = new SearchByTitleRevision(title, rev);
-                Logger.Info($"Fetching details of ${title}-${rev} ...");
+                Logger.Info($"Fetching details of {title}-{rev} ...");
                 List<NlsLabeledItemSet<EngineeringItem>> pages = await engServices.SearchAll(searchQuery, EngineeringSearchMask.Details, 1);
 
                 if (pages.Count == 0) throw new Exception(err);
@@ -63,6 +63,11 @@ namespace technia.admintool.bulkupdate.helper
                 Logger.Error($"Error while unreserving engineering item {id} from {reservedBy} : {e}");
                 return (reservedBy, e.Message, "EngItem Could not be reserved");
             }
+        }
+
+        public static async Task<(string, string)> UpdateEngItemAsync(EngineeringServices engServices, ExpandoObject record, string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

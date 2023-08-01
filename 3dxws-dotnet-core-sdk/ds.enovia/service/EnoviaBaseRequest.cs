@@ -16,35 +16,33 @@
 
 using ds.enovia.common.constants;
 using ds.enovia.common.helper;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using System.Web;
 
 namespace ds.enovia.service
 {
     public class EnoviaBaseRequest : HttpRequestMessage
     {
-        private string m_path  = string.Empty;
+        private string m_path = string.Empty;
         private string m_query = string.Empty;
 
-        public EnoviaBaseRequest(HttpMethod _httpMethod, string _resource, string _tenant = null, string _securitycontext = null, string _csrftoken = null) : base(_httpMethod, new UriRelative( _resource))
+        public EnoviaBaseRequest(HttpMethod _httpMethod, string _resource, string _tenant = null, string _securitycontext = null, string _csrftoken = null) : base(_httpMethod, new UriRelative(_resource))
         {
             m_path = _resource;
 
             SecurityContext = _securitycontext;
-            CSRFToken       = _csrftoken;
-            Tenant          = _tenant;
+            CSRFToken = _csrftoken;
+            Tenant = _tenant;
 
             if (SecurityContext != null)
             {
-                Headers.Add(HttpRequestHeaders.SECURITY_CONTEXT, _securitycontext);
+                Headers.Add(ds.enovia.common.constants.HttpRequestHeaders.SECURITY_CONTEXT, _securitycontext);
             }
 
             if (CSRFToken != null)
             {
-                Headers.Add(HttpRequestHeaders.ENO_CSRF_TOKEN, _csrftoken);
+                Headers.Add(ds.enovia.common.constants.HttpRequestHeaders.ENO_CSRF_TOKEN, _csrftoken);
             }
 
             if (Tenant != null)

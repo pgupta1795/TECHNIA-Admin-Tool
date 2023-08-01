@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "technia.admintool.settings"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "technia.admintool.bulkupdate", "technia.admintool.bulkupdate\technia.admintool.bulkupdate.csproj", "{B501BCA5-584E-48A7-8A92-72A481A3E698}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ds.enovia.change", "3dxws-dotnet-core-sdk\ds.enovia.change\ds.enovia.change.csproj", "{F83EDD2C-BB8E-4A36-993B-3D35B31D39AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{B501BCA5-584E-48A7-8A92-72A481A3E698}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B501BCA5-584E-48A7-8A92-72A481A3E698}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B501BCA5-584E-48A7-8A92-72A481A3E698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F83EDD2C-BB8E-4A36-993B-3D35B31D39AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F83EDD2C-BB8E-4A36-993B-3D35B31D39AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F83EDD2C-BB8E-4A36-993B-3D35B31D39AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F83EDD2C-BB8E-4A36-993B-3D35B31D39AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
