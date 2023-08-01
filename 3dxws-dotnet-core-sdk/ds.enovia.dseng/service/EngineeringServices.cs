@@ -252,8 +252,7 @@ namespace ds.enovia.dseng.service
             {
                 return returnSet.member[0];
             }
-
-            return null;
+            throw new Exception("Could not update eng item attributes"); // return null
         }
 
         #region EnterpriseReference

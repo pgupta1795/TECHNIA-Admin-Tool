@@ -6,6 +6,7 @@ using ds.enovia.dseng.service;
 using ds.enovia.dslc.model;
 using ds.enovia.dslc.service;
 using System.Dynamic;
+using System.Reflection;
 using technia.admintool.settings;
 
 namespace technia.admintool.bulkupdate.helper
@@ -65,9 +66,108 @@ namespace technia.admintool.bulkupdate.helper
             }
         }
 
-        public static async Task<(string, string)> UpdateEngItemAsync(EngineeringServices engServices, ExpandoObject record, string id)
+        public static async Task<(string, string)> UpdateEngItemAsync(EngineeringServices engServices, ExpandoObject record, EngineeringItem engItem)
         {
-            throw new NotImplementedException();
+            var dict = ExpandoObjectUtils.GetDictionary(record);
+            string title = EnoviaObject.GetTitle(dict);
+            string rev = EnoviaObject.GetRevision(dict);
+
+            try
+            {
+                var newEnterpriseAttrs = new Dictionary<string, object>();
+                foreach (var key in dict.Keys)
+                {
+                    var value = dict[key];
+                    PropertyInfo property = typeof(EngineeringItem).GetProperty(key);
+
+                    //if csv column name is not found as direct properties of engItem like name,rev,desc,etc
+                    //then we dive into enterpriseAttributes property and find that csv column in enterpriseAttributes property
+                    if (property == null)
+                    {
+                        Dictionary<string, object> enterpriseAttrs = engItem.enterpriseAttributes;
+                        string newEntrAttributesValue = "";
+                        if (enterpriseAttrs.ContainsKey(key))
+                        {
+                            object entrAttributesValue = enterpriseAttrs[key];
+                            Logger.Info($"old entrAttributesValue - {entrAttributesValue}");
+                        }
+                        newEnterpriseAttrs.Add(key, value);
+                    }
+                    else if (key.Equals("isManufacturable"))
+                    {
+                        engItem.isManufacturable = (bool)value;
+                    }
+                    else if (key.Equals("cestamp"))
+                    {
+                        // cestamp should be always new
+                    }
+                    else if (key.Equals("name"))
+                    {
+                        engItem.name = (string)value;
+                    }
+                    else if (key.Equals("title"))
+                    {
+                        engItem.title = (string)value;
+                    }
+                    else if (key.Equals("description"))
+                    {
+                        engItem.description = (string)value;
+                    }
+                    else if (key.Equals("id"))
+                    {
+                        // id remains as is
+                    }
+                    else if (key.Equals("type"))
+                    {
+                        // type remains as is
+                    }
+                    else if (key.Equals("modified"))
+                    {
+                        // engItem.modified = (string)value;
+                        // do not change
+                    }
+                    else if (key.Equals("created"))
+                    {
+                        // engItem.created = (string)value;
+                        // do not change
+                    }
+                    else if (key.Equals("revision"))
+                    {
+                        // engItem.revision = (string)value;
+                        // do not change
+                    }
+                    else if (key.Equals("state"))
+                    {
+                        // engItem.state = (string)value;
+                        // do not change
+                    }
+                    else if (key.Equals("owner"))
+                    {
+                        // engItem.owner = (string)value;
+                        // do not change
+                    }
+                    else if (key.Equals("organization"))
+                    {
+                        engItem.organization = (string)value;
+                    }
+                    else if (key.Equals("collabspace"))
+                    {
+                        engItem.collabspace = (string)value;
+                    }
+                }
+
+                engItem.enterpriseAttributes = newEnterpriseAttrs;
+
+                Logger.Info($"Updating eng Item {title}-{rev} ...");
+                EngineeringItem updatedEngItems = await engServices.UpdateEngineeringItem(engItem);
+                var comment = "Updated eng Item";
+                return (null, comment);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Error while updating eng item attributes {title} : {e}");
+                return (e.Message, "Updation of eng item failed");
+            }
         }
     }
 }

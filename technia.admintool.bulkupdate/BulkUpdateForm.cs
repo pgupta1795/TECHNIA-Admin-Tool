@@ -130,7 +130,7 @@ namespace technia.admintool.bulkupdate
                                 else
                                 {
                                     // Update part with the data from csv back to 3DX
-                                    var (error5, comment5) = await EngUtils.UpdateEngItemAsync(engServices, record, id);
+                                    var (error5, comment5) = await EngUtils.UpdateEngItemAsync(engServices, record, engItem);
                                     rowComments += $", {comment5}";
                                     if (error5 != null) rowErrors += error5;
                                 }
@@ -138,7 +138,7 @@ namespace technia.admintool.bulkupdate
                             else
                             {
                                 // Update part with the data from csv back to 3DX
-                                var (error5, comment5) = await EngUtils.UpdateEngItemAsync(engServices, record, id);
+                                var (error5, comment5) = await EngUtils.UpdateEngItemAsync(engServices, record, engItem);
                                 rowComments += $", {comment5}";
                                 if (error5 != null) rowErrors += error5;
                             }
